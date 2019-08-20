@@ -7,3 +7,8 @@ RUN curl --silent --show-error --location --fail --retry 3 --output /tmp/google-
     && sudo sed -i 's|HERE/chrome"|HERE/chrome" --disable-setuid-sandbox --no-sandbox|g' \
         "/opt/google/chrome/google-chrome" \
     && google-chrome --version
+
+# Xvfb
+RUN apt-get update -qqy \
+	&& apt-get -qqy install xvfb \
+	&& rm -rf /var/lib/apt/lists/* /var/cache/apt/*
