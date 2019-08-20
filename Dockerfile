@@ -1,16 +1,7 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.1
 
 # Google Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-	&& echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-	&& apt-get update -qqy \
-	&& apt-get -qqy install curl unzip \
-	&& apt-get -qqy install google-chrome-stable \
-	&& rm /etc/apt/sources.list.d/google-chrome.list \
-	&& rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
-	&& sed -i 's/"$HERE\/chrome"/"$HERE\/chrome" --no-sandbox/g' /opt/google/chrome/google-chrome
-
-# Xvfb
-RUN apt-get update -qqy \
-	&& apt-get -qqy install xvfb \
-	&& rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list
+RUN apt-get update 
+RUN apt-get -y install google-chrome-stable
