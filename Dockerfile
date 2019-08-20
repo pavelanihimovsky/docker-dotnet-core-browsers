@@ -1,7 +1,9 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.1
 
-# Google Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list
-RUN apt-get update 
-RUN apt-get -y install google-chrome-stable
+# install chrome
+RUN curl --silent --show-error --location --fail --retry 3 --output /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+    && (sudo dpkg -i /tmp/google-chrome-stable_current_amd64.deb || sudo apt-get -fy install)  \
+    && rm -rf /tmp/google-chrome-stable_current_amd64.deb \
+    && sudo sed -i 's|HERE/chrome"|HERE/chrome" --disable-setuid-sandbox --no-sandbox|g' \
+        "/opt/google/chrome/google-chrome" \
+    && google-chrome --version
